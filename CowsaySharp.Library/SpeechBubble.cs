@@ -5,12 +5,12 @@
     using System.Linq;
     using System.Text;
 
-    static public class SpeechBubble
+    public static class SpeechBubble
     {
-        static public string ReturnSpeechBubble(string message, IBubbleChars bubbles, int? maxLineLength, bool figlet)
+        public static string ReturnSpeechBubble(string message, IBubbleChars bubbles, int? maxLineLength, bool figlet)
         {
             char[] splitChar = { ' ', (char)10, (char)13 };
-            List<string> messageAsList = new List<string>();
+            var messageAsList = new List<string>();
 
             if (!maxLineLength.HasValue)
             {
@@ -24,11 +24,17 @@
             }
 
             if (figlet)
+            {
                 messageAsList = SplitFigletToLinesAsList(message);
+            }
             else if (message.Length > maxLineLength)
+            {
                 messageAsList = SplitToLinesAsList(message, splitChar, (int)maxLineLength);
+            }
             else if (message.Length < maxLineLength && message.IndexOfAny(splitChar) != -1)
+            {
                 messageAsList = SplitToLinesAsListShort(message);
+            }
 
             if (message.Length > maxLineLength || messageAsList.Count > 1)
             {
@@ -42,22 +48,22 @@
             return message;
         }
 
-        static string createLargeWordBubble(List<string> list, IBubbleChars bubbles)
+        private static string createLargeWordBubble(IReadOnlyList<string> list, IBubbleChars bubbles)
         {
-            StringBuilder bubbleBuilder = new StringBuilder();
-            int longestLineInList = list.Max(s => s.Length);
-            int lengthOfTopAndBottomLinesInBubble = longestLineInList + 2;
-            string topBubbleLine = $" {repeatCharacter(bubbles.TopLine, lengthOfTopAndBottomLinesInBubble)}";
-            string bottomBubbleLine = $" {repeatCharacter(bubbles.BottomLine, lengthOfTopAndBottomLinesInBubble)}";
-            string firstLineInMessageSpaces = repeatCharacter(' ', longestLineInList - list[0].Length + 1);
-            string lastLineInMessageSpaces = repeatCharacter(' ', longestLineInList - list[list.Count - 1].Length + 1);
+            var bubbleBuilder = new StringBuilder();
+            var longestLineInList = list.Max(s => s.Length);
+            var lengthOfTopAndBottomLinesInBubble = longestLineInList + 2;
+            var topBubbleLine = $" {repeatCharacter(bubbles.TopLine, lengthOfTopAndBottomLinesInBubble)}";
+            var bottomBubbleLine = $" {repeatCharacter(bubbles.BottomLine, lengthOfTopAndBottomLinesInBubble)}";
+            var firstLineInMessageSpaces = repeatCharacter(' ', longestLineInList - list[0].Length + 1);
+            var lastLineInMessageSpaces = repeatCharacter(' ', longestLineInList - list[list.Count - 1].Length + 1);
 
             bubbleBuilder.AppendLine(topBubbleLine);
             bubbleBuilder.AppendLine($"{bubbles.UpLeft} {list[0]}{firstLineInMessageSpaces}{bubbles.UpRight}");
-            for (int i = 1; i < list.Count() - 1; i++)
+            for (var i = 1; i < list.Count - 1; i++)
             {
-                int numberofspaces = longestLineInList - list[i].Length;
-                string spacesInLine = repeatCharacter(' ', numberofspaces + 1);
+                var numberofspaces = longestLineInList - list[i].Length;
+                var spacesInLine = repeatCharacter(' ', numberofspaces + 1);
 
                 bubbleBuilder.AppendLine($"{bubbles.Left} {list[i]}{spacesInLine}{bubbles.Right}");
             }
@@ -69,25 +75,25 @@
             return bubbleBuilder.ToString();
         }
 
-        static string createSmallWordBubble(string message, IBubbleChars bubbles)
+        private static string createSmallWordBubble(string message, IBubbleChars bubbles)
         {
-            int lengthOfMessage = message.Length;
-            int lengthOfTopAndBottomLinesInBubble = lengthOfMessage + 2;
-            string topBubbleLine = repeatCharacter(bubbles.TopLine, lengthOfTopAndBottomLinesInBubble);
-            string bottomBubbleLine = repeatCharacter(bubbles.BottomLine, lengthOfTopAndBottomLinesInBubble);
+            var lengthOfMessage = message.Length;
+            var lengthOfTopAndBottomLinesInBubble = lengthOfMessage + 2;
+            var topBubbleLine = repeatCharacter(bubbles.TopLine, lengthOfTopAndBottomLinesInBubble);
+            var bottomBubbleLine = repeatCharacter(bubbles.BottomLine, lengthOfTopAndBottomLinesInBubble);
 
             return
                 $" {topBubbleLine} \r\n{bubbles.SmallLeft} {message.Trim()} {bubbles.SmallRight}\r\n {bottomBubbleLine}";
         }
 
-        static string repeatCharacter(char character, int numberOfUnderscores)
+        private static string repeatCharacter(char character, int numberOfUnderscores)
         {
             return new string(character, numberOfUnderscores);
         }
 
-        static List<string> SplitFigletToLinesAsList(string text)
+        private static List<string> SplitFigletToLinesAsList(string text)
         {
-            List<string> ListToReturn = new List<string>();
+            var listToReturn = new List<string>();
             char[] newLines = { (char)10, (char)13 };
             var sb = new StringBuilder(text);
 
@@ -95,86 +101,100 @@
             {
                 try
                 {
-                    int indexOfFirstNewLine = sb.ToString().IndexOfAny(newLines);
-                    ListToReturn.Add(sb.ToString().Substring(0, indexOfFirstNewLine));
+                    var indexOfFirstNewLine = sb.ToString().IndexOfAny(newLines);
+                    listToReturn.Add(sb.ToString().Substring(0, indexOfFirstNewLine));
                     sb.Remove(0, indexOfFirstNewLine + 2);
                 }
                 catch
                 {
-                    ListToReturn.Add(sb.ToString().Substring(0));
+                    listToReturn.Add(sb.ToString().Substring(0));
                     sb.Clear();
                 }
             }
 
-            return ListToReturn;
+            return listToReturn;
         }
 
-        static List<string> SplitToLinesAsList(string message, char[] splitOnCharacters, int maxStringLength)
+        private static List<string> SplitToLinesAsList(string message, char[] splitOnCharacters, int maxStringLength)
         {
-            List<string> ListToReturn = new List<string>();
-            StringBuilder messageSB = new StringBuilder(message);
+            var listToReturn = new List<string>();
+            var messageSb = new StringBuilder(message);
             char[] newLineCharacters = { (char)10, (char)13 };
-            var index = 0;
-            int splitAt;
+            const int Index = 0;
 
-            while (messageSB.ToString().Length > index)
+            while (messageSb.ToString().Length > Index)
             {
-                if (index + maxStringLength <= messageSB.ToString().Length)
+                int splitAt;
+                if (Index + maxStringLength <= messageSb.ToString().Length)
                 {
-                    string thisLine = messageSB.ToString().Substring(index, maxStringLength);
+                    var thisLine = messageSb.ToString().Substring(Index, maxStringLength);
                     if (thisLine.IndexOfAny(newLineCharacters) != -1)
+                    {
                         if (thisLine.StartsWith(((char)10).ToString()) || thisLine.StartsWith(((char)13).ToString()))
+                        {
                             splitAt = 1;
+                        }
                         else
+                        {
                             splitAt = thisLine.LastIndexOfAny(newLineCharacters);
+                        }
+                    }
                     else
+                    {
                         splitAt = thisLine.LastIndexOf(' ');
+                    }
                 }
                 else
                 {
-                    splitAt = messageSB.ToString().Length - index;
+                    splitAt = messageSb.ToString().Length - Index;
                 }
 
-                splitAt = (splitAt == -1) ? maxStringLength : splitAt;
+                splitAt = splitAt == -1 ? maxStringLength : splitAt;
 
-                ListToReturn.Add(messageSB.ToString().Substring(index, splitAt).Trim());
-                messageSB.Remove(index, splitAt);
+                listToReturn.Add(messageSb.ToString().Substring(Index, splitAt).Trim());
+                messageSb.Remove(Index, splitAt);
             }
 
-            return ListToReturn;
+            return listToReturn;
         }
 
-        static List<string> SplitToLinesAsListShort(string message)
+        private static List<string> SplitToLinesAsListShort(string message)
         {
-            List<string> ListToReturn = new List<string>();
-            StringBuilder sb = new StringBuilder(message);
+            var listToReturn = new List<string>();
+            var sb = new StringBuilder(message);
             char[] splitChars = { (char)10, (char)13 };
 
-            int startingIndex = 0;
-            int lengthLeft = sb.ToString().Length;
+            const int StartingIndex = 0;
+            var lengthLeft = sb.ToString().Length;
 
             while (lengthLeft != 0)
             {
-                int lengthIndex = sb.ToString().IndexOfAny(splitChars) != -1
+                var lengthIndex = sb.ToString().IndexOfAny(splitChars) != -1
                                       ? sb.ToString().IndexOfAny(splitChars)
                                       : sb.ToString().Length;
 
-                ListToReturn.Add(sb.ToString().Substring(startingIndex, lengthIndex));
+                listToReturn.Add(sb.ToString().Substring(StartingIndex, lengthIndex));
                 if (sb.ToString().Length == lengthIndex)
-                    sb.Remove(startingIndex, lengthIndex);
+                {
+                    sb.Remove(StartingIndex, lengthIndex);
+                }
                 else
                 {
-                    string newLineChar = sb.ToString().Substring(lengthIndex, 2);
+                    var newLineChar = sb.ToString().Substring(lengthIndex, 2);
                     if (newLineChar == Environment.NewLine)
-                        sb.Remove(startingIndex, lengthIndex + 2);
+                    {
+                        sb.Remove(StartingIndex, lengthIndex + 2);
+                    }
                     else
-                        sb.Remove(startingIndex, lengthIndex + 1);
+                    {
+                        sb.Remove(StartingIndex, lengthIndex + 1);
+                    }
                 }
 
                 lengthLeft = sb.ToString().Length;
             }
 
-            return ListToReturn;
+            return listToReturn;
         }
     }
 }

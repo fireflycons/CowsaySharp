@@ -3,19 +3,18 @@
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
     using System.Text;
 
-    static public class GetCow
+    public static class GetCow
     {
-        static private StringBuilder cow;
+        private static StringBuilder cow;
 
-        static public string ReturnCow(string cowFile, IBubbleChars bubbles, CowFace face)
+        public static string ReturnCow(string cowFile, IBubbleChars bubbles, CowFace face)
         {
-            StreamReader sr = new StreamReader(cowFile);
-            cow = new StringBuilder(sr.ReadToEnd().ToString());
-            bool threeEyes = false;
-            if (cow.ToString().Contains("($extra x 2)"))
-                threeEyes = true;
+            var sr = new StreamReader(cowFile);
+            cow = new StringBuilder(sr.ReadToEnd());
+            var threeEyes = cow.ToString().Contains("($extra x 2)");
 
             cow = removeExtraCowLines(cow);
 
@@ -24,13 +23,13 @@
             cow.Replace("$thoughts", bubbles.Bubble);
             if (threeEyes)
             {
-                string eyesForReplacement = new String(face.Eyes[0], 3);
+                var eyesForReplacement = new string(face.Eyes[0], 3);
                 cow.Replace("$eyes", eyesForReplacement);
                 cow.Replace("${eyes}", eyesForReplacement);
             }
             else
             {
-                string eyesForReplacement = face.Eyes;
+                var eyesForReplacement = face.Eyes;
                 cow.Replace("$eyes", eyesForReplacement);
                 cow.Replace("${eyes}", eyesForReplacement);
             }
@@ -38,31 +37,33 @@
             cow.Replace("$tongue", face.Tongue);
 
             if (cow.ToString().Substring(0, 1) == "\n")
+            {
                 cow.Remove(0, 1);
+            }
 
             return cow.ToString().TrimEnd();
         }
 
-        static private StringBuilder removeExtraCowLines(StringBuilder cow)
+        private static StringBuilder removeExtraCowLines(StringBuilder cowBuilder)
         {
-            string cowString = cow.ToString();
-            StringBuilder cowToReturn = new StringBuilder();
-            List<string> cowList = new List<string>();
+            var cowString = cowBuilder.ToString();
+            var cowToReturn = new StringBuilder();
+            var cowList = new List<string>();
 
             while (cowString.Length > 0)
             {
-                string sub = cowString.Substring(0, cowString.IndexOf("\n"));
+                var sub = cowString.Substring(0, cowString.IndexOf("\n", StringComparison.Ordinal));
 
                 cowList.Add(sub);
 
-                cow.Remove(0, cowString.IndexOf("\n") + 1);
-                cowString = cow.ToString();
+                cowBuilder.Remove(0, cowString.IndexOf("\n", StringComparison.Ordinal) + 1);
+                cowString = cowBuilder.ToString();
             }
 
-            foreach (string line in cowList)
+            foreach (var line in cowList.Where(
+                line => !(line.StartsWith("#") || line.StartsWith("$") || line.StartsWith("EOC"))))
             {
-                if (!(line.StartsWith("#") || line.StartsWith("$") || line.StartsWith("EOC")))
-                    cowToReturn.Append(line + Environment.NewLine);
+                cowToReturn.Append(line + Environment.NewLine);
             }
 
             return cowToReturn;

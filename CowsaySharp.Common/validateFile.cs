@@ -2,13 +2,13 @@
 {
     using System.IO;
 
-    static public class ValidateFile
+    public static class ValidateFile
     {
-        static public bool validate(string file)
+        public static bool validate(string file)
         {
             try
             {
-                var fileAccess = File.GetAccessControl(file);
+                File.GetAccessControl(file);
                 return true;
             }
             catch

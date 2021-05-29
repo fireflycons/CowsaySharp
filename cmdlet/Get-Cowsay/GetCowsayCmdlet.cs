@@ -7,15 +7,12 @@
 
     using CowsaySharp.Common;
     using CowsaySharp.ConsoleLibrary;
-    using CowsaySharp.GetCowsay.Containers;
     using CowsaySharp.Library;
 
     [Cmdlet(VerbsCommon.Get, "Cowsay")]
     [OutputType(typeof(Cowsay))]
     public class GetCowsayCmdlet : Cmdlet
     {
-        private int _wrapcolumn = 40;
-
         bool breakOut;
 
         IBubbleChars bubbleChars;
@@ -30,49 +27,38 @@
 
         [Parameter]
         [Alias("f")]
-        public string cowfile { get; set; }
+        public string Cowfile { get; set; }
 
         [Parameter]
         [Alias("e")]
-        public string eyes { get; set; }
+        public string Eyes { get; set; }
 
         [Parameter]
         [Alias("n")]
-        public SwitchParameter figlet { get; set; }
+        public SwitchParameter Figlet { get; set; }
 
         [Parameter]
         [Alias("l")]
-        public SwitchParameter list { get; set; }
+        public SwitchParameter List { get; set; }
 
         [Parameter(ValueFromPipeline = true, Position = 0)]
-        public string message { get; set; }
+        public string Message { get; set; }
 
         [Parameter]
         [ValidateSet("borg", "dead", "greedy", "paranoid", "stoned", "tired", "wired", "young")]
         [Alias("m")]
-        public string mode { get; set; }
+        public string Mode { get; set; }
 
         [Parameter]
-        public SwitchParameter think { get; set; }
+        public SwitchParameter Think { get; set; }
 
         [Parameter]
         [Alias("T")]
-        public string tongue { get; set; }
+        public string Tongue { get; set; }
 
         [Parameter]
         [Alias("W")]
-        public int wrapcolumn
-        {
-            get
-            {
-                return this._wrapcolumn;
-            }
-
-            set
-            {
-                this._wrapcolumn = value;
-            }
-        }
+        public int Wrapcolumn { get; set; } = 40;
 
         protected override void BeginProcessing()
         {
@@ -81,68 +67,77 @@
             this.cowSpecified = $"{this.cowFileLocation}\\default.cow";
             this.face = new CowFace();
 
-            if (!string.IsNullOrEmpty(this.mode))
+            if (!string.IsNullOrEmpty(this.Mode))
             {
-                switch (this.mode)
+                switch (this.Mode)
                 {
                     case "borg":
-                        this.face = CowFaces.GetCowFace(CowFaces.cowFaces.borg);
+                        this.face = CowFaces.GetCowFace(CowFaces.FaceTypes.Borg);
                         break;
                     case "dead":
-                        this.face = CowFaces.GetCowFace(CowFaces.cowFaces.dead);
+                        this.face = CowFaces.GetCowFace(CowFaces.FaceTypes.Dead);
                         break;
                     case "greedy":
-                        this.face = CowFaces.GetCowFace(CowFaces.cowFaces.greedy);
+                        this.face = CowFaces.GetCowFace(CowFaces.FaceTypes.Greedy);
                         break;
                     case "paranoid":
-                        this.face = CowFaces.GetCowFace(CowFaces.cowFaces.paranoid);
+                        this.face = CowFaces.GetCowFace(CowFaces.FaceTypes.Paranoid);
                         break;
                     case "stoned":
-                        this.face = CowFaces.GetCowFace(CowFaces.cowFaces.stoned);
+                        this.face = CowFaces.GetCowFace(CowFaces.FaceTypes.Stoned);
                         break;
                     case "tired":
-                        this.face = CowFaces.GetCowFace(CowFaces.cowFaces.tired);
+                        this.face = CowFaces.GetCowFace(CowFaces.FaceTypes.Tired);
                         break;
                     case "wired":
-                        this.face = CowFaces.GetCowFace(CowFaces.cowFaces.wired);
+                        this.face = CowFaces.GetCowFace(CowFaces.FaceTypes.Wired);
                         break;
                     case "young":
-                        this.face = CowFaces.GetCowFace(CowFaces.cowFaces.young);
+                        this.face = CowFaces.GetCowFace(CowFaces.FaceTypes.Young);
                         break;
                 }
             }
 
-            if (!string.IsNullOrEmpty(this.eyes) && string.IsNullOrWhiteSpace(this.face.Eyes))
-                this.face = new CowFace(this.eyes);
-
-            if (string.IsNullOrEmpty(this.face.Eyes)) this.face = CowFaces.GetCowFace(CowFaces.cowFaces.defaultFace);
-
-            if (!string.IsNullOrEmpty(this.tongue) && string.IsNullOrWhiteSpace(this.face.Tongue))
-                this.face.Tongue = this.tongue;
-
-            if (!string.IsNullOrEmpty(this.cowfile))
+            if (!string.IsNullOrEmpty(this.Eyes) && string.IsNullOrWhiteSpace(this.face.Eyes))
             {
-                this.cowSpecified = this.cowfile;
-                TestCowFile testCowFile = new TestCowFile(ref this.cowSpecified, this.cowFileLocation);
-                this.breakOut = testCowFile.breakOut;
+                this.face = new CowFace(this.Eyes);
+            }
+
+            if (string.IsNullOrEmpty(this.face.Eyes))
+            {
+                this.face = CowFaces.GetCowFace(CowFaces.FaceTypes.DefaultFace);
+            }
+
+            if (!string.IsNullOrEmpty(this.Tongue) && string.IsNullOrWhiteSpace(this.face.Tongue))
+            {
+                this.face.Tongue = this.Tongue;
+            }
+
+            if (!string.IsNullOrEmpty(this.Cowfile))
+            {
+                this.cowSpecified = this.Cowfile;
+                var testCowFile = new TestCowFile(ref this.cowSpecified, this.cowFileLocation);
+                this.breakOut = testCowFile.BreakOut;
             }
             else
             {
-                TestCowFile testCowFile = new TestCowFile(ref this.cowSpecified, this.cowFileLocation);
-                this.breakOut = testCowFile.breakOut;
+                var testCowFile = new TestCowFile(ref this.cowSpecified, this.cowFileLocation);
+                this.breakOut = testCowFile.BreakOut;
             }
 
-            if (this.wrapcolumn < 10 | this.wrapcolumn > 76)
+            if (this.Wrapcolumn < 10 | this.Wrapcolumn > 76)
+            {
                 this.ThrowTerminatingError(
                     new ErrorRecord(
                         new ArgumentOutOfRangeException(
-                            nameof(this.wrapcolumn),
+                            nameof(this.Wrapcolumn),
                             "Cannot specify a size smaller than 10 characters or larger than 76 characters"),
                         "E1",
                         ErrorCategory.LimitsExceeded,
                         this));
+            }
 
-            if (this.think)
+            if (this.Think)
             {
                 this.bubbleChars = new ThinkBubbleChars();
             }
@@ -154,27 +149,28 @@
 
         protected override void ProcessRecord()
         {
-            if (this.list)
+            if (this.List)
             {
                 Console.WriteLine();
                 ListCowfiles.ShowCowfiles(this.moduleDirectory, list: true);
                 Console.WriteLine();
                 this.breakOut = true;
             }
-            else if (string.IsNullOrWhiteSpace(this.message))
+            else if (string.IsNullOrWhiteSpace(this.Message))
+            {
                 Console.WriteLine();
-            else if (!this.breakOut) this.WriteObject(this.BuildCowsay());
+            }
+            else if (!this.breakOut)
+            {
+                this.WriteObject(this.BuildCowsay());
+            }
         }
 
         private Cowsay BuildCowsay()
         {
-            string SpeechBubbleReturned = SpeechBubble.ReturnSpeechBubble(
-                this.message,
-                this.bubbleChars,
-                this.wrapcolumn,
-                this.figlet);
-            string CowReturned = GetCow.ReturnCow(this.cowSpecified, this.bubbleChars, this.face);
-            return new Cowsay(CowReturned, SpeechBubbleReturned);
+            return new Cowsay(
+                GetCow.ReturnCow(this.cowSpecified, this.bubbleChars, this.face),
+                SpeechBubble.ReturnSpeechBubble(this.Message, this.bubbleChars, this.Wrapcolumn, this.Figlet));
         }
     }
 }

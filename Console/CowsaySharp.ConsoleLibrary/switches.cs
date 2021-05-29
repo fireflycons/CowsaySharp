@@ -6,145 +6,191 @@
 
     using CowsaySharp.Library;
 
-    static public class Switches
+    public static class Switches
     {
-        static public void processSwitches(string[] args, string programDir, IBubbleChars BubbleChars)
+        public static void processSwitches(string[] args, string programDir, IBubbleChars bubbleChars)
         {
-            bool breakOut = false;
-            bool cowProcessing = false;
-            bool cowFileTested = false;
-            bool presetFaceSet = false;
-            bool isFiglet = false;
+            var breakOut = false;
+            var cowProcessing = false;
+            var cowFileTested = false;
+            var presetFaceSet = false;
+            var isFiglet = false;
 
-            string cowFileLocation = $"{programDir}\\cows";
-            string cowSpecified = $"{cowFileLocation}\\default.cow";
-            string argument;
-            string messageAsString;
+            var cowFileLocation = $"{programDir}\\cows";
+            var cowSpecified = $"{cowFileLocation}\\default.cow";
 
-            StringBuilder message = new StringBuilder();
+            var message = new StringBuilder();
 
-            CowFace face = CowFaces.GetCowFace(CowFaces.cowFaces.defaultFace);
+            var face = CowFaces.GetCowFace(CowFaces.FaceTypes.DefaultFace);
 
-            int numberOfArguments = args.Length;
-            int columnSize = 40;
+            var numberOfArguments = args.Length;
+            var columnSize = 40;
 
-            for (int i = 0; i < numberOfArguments; i++)
+            for (var i = 0; i < numberOfArguments; i++)
             {
-                argument = args[i];
-                if (args[i].Contains('-'))
-                    argument = args[i].Remove(args[i].IndexOf('-'), 1);
-                else
-                    argument = "!";
+                var argument = args[i].Contains('-') ? args[i].Remove(args[i].IndexOf('-'), 1) : "!";
 
-                foreach (char arg in argument)
+                foreach (var arg in argument)
                 {
                     switch (arg)
                     {
                         case 'W':
                             if (!cowProcessing)
+                            {
                                 cowProcessing = true;
+                            }
+
                             columnSize = int.Parse(args[i + 1]);
                             i++;
                             break;
                         case 'n':
+
                             if (!cowProcessing)
+                            {
                                 cowProcessing = true;
+                            }
 
                             isFiglet = true;
 
                             break;
+
                         case 'b':
                             if (!cowProcessing)
+                            {
                                 cowProcessing = true;
+                            }
 
                             if (!presetFaceSet)
+                            {
                                 presetFaceSet = true;
+                            }
 
-                            face = CowFaces.GetCowFace(CowFaces.cowFaces.borg);
+                            face = CowFaces.GetCowFace(CowFaces.FaceTypes.Borg);
 
                             break;
+
                         case 'd':
                             if (!cowProcessing)
+                            {
                                 cowProcessing = true;
+                            }
 
                             if (!presetFaceSet)
+                            {
                                 presetFaceSet = true;
+                            }
 
-                            face = CowFaces.GetCowFace(CowFaces.cowFaces.dead);
+                            face = CowFaces.GetCowFace(CowFaces.FaceTypes.Dead);
 
                             break;
                         case 'g':
                             if (!cowProcessing)
+                            {
                                 cowProcessing = true;
+                            }
 
                             if (!presetFaceSet)
+                            {
                                 presetFaceSet = true;
+                            }
 
-                            face = CowFaces.GetCowFace(CowFaces.cowFaces.greedy);
+                            face = CowFaces.GetCowFace(CowFaces.FaceTypes.Greedy);
 
                             break;
                         case 'p':
                             if (!cowProcessing)
+                            {
                                 cowProcessing = true;
+                            }
 
                             if (!presetFaceSet)
+                            {
                                 presetFaceSet = true;
+                            }
 
-                            face = CowFaces.GetCowFace(CowFaces.cowFaces.paranoid);
+                            face = CowFaces.GetCowFace(CowFaces.FaceTypes.Paranoid);
 
                             break;
+
                         case 's':
                             if (!cowProcessing)
+                            {
                                 cowProcessing = true;
+                            }
 
                             if (!presetFaceSet)
+                            {
                                 presetFaceSet = true;
+                            }
 
-                            face = CowFaces.GetCowFace(CowFaces.cowFaces.stoned);
+                            face = CowFaces.GetCowFace(CowFaces.FaceTypes.Stoned);
 
                             break;
+
                         case 't':
                             if (!cowProcessing)
+                            {
                                 cowProcessing = true;
+                            }
 
                             if (!presetFaceSet)
+                            {
                                 presetFaceSet = true;
+                            }
 
-                            face = CowFaces.GetCowFace(CowFaces.cowFaces.tired);
+                            face = CowFaces.GetCowFace(CowFaces.FaceTypes.Tired);
 
                             break;
+
                         case 'w':
                             if (!cowProcessing)
+                            {
                                 cowProcessing = true;
+                            }
 
                             if (!presetFaceSet)
+                            {
                                 presetFaceSet = true;
+                            }
 
-                            face = CowFaces.GetCowFace(CowFaces.cowFaces.wired);
+                            face = CowFaces.GetCowFace(CowFaces.FaceTypes.Wired);
 
                             break;
                         case 'y':
+
                             if (!cowProcessing)
+                            {
                                 cowProcessing = true;
+                            }
 
                             if (!presetFaceSet)
+                            {
                                 presetFaceSet = true;
+                            }
 
-                            face = CowFaces.GetCowFace(CowFaces.cowFaces.young);
+                            face = CowFaces.GetCowFace(CowFaces.FaceTypes.Young);
 
                             break;
+
                         case 'e':
                             if (!cowProcessing)
+                            {
                                 cowProcessing = true;
+                            }
 
                             if (!presetFaceSet)
+                            {
                                 face.Eyes = args[i + 1];
+                            }
 
                             i++;
                             break;
+
                         case 'T':
                             if (!cowProcessing)
+                            {
                                 cowProcessing = true;
+                            }
 
                             if (string.IsNullOrWhiteSpace(face.Tongue))
                             {
@@ -153,20 +199,19 @@
 
                             i++;
                             break;
-                        case 'f':
-                            if (!cowProcessing)
-                                cowProcessing = true;
 
+                        case 'f':
                             cowSpecified = args[i + 1];
 
-                            TestCowFile testCowFile = new TestCowFile(ref cowSpecified, cowFileLocation);
+                            var testCowFile = new TestCowFile(ref cowSpecified, cowFileLocation);
 
-                            breakOut = testCowFile.breakOut;
-                            cowProcessing = testCowFile.cowProcessing;
+                            breakOut = testCowFile.BreakOut;
+                            cowProcessing = testCowFile.CowProcessing;
                             cowFileTested = true;
 
                             i++;
                             break;
+
                         case 'h':
                             if (!cowProcessing)
                             {
@@ -175,64 +220,74 @@
                             }
 
                             break;
+
                         case 'l':
                             if (!cowProcessing)
                             {
-                                ListCowfiles.ShowCowfiles(programDir, list: false);
+                                ListCowfiles.ShowCowfiles(programDir, false);
                                 breakOut = true;
                             }
 
                             break;
+
                         case 'L':
+
                             if (!cowProcessing)
                             {
-                                ListCowfiles.ShowCowfiles(programDir, list: true);
+                                ListCowfiles.ShowCowfiles(programDir, true);
                                 breakOut = true;
                             }
 
                             break;
-                        case '!':
+
                         default:
                             if (!cowProcessing)
+                            {
                                 cowProcessing = true;
+                            }
 
-                            for (int j = i; j < numberOfArguments; j++)
+                            for (var j = i; j < numberOfArguments; j++)
+                            {
                                 message.Append(args[j] + " ");
+                            }
 
                             i = numberOfArguments;
                             break;
                     }
 
                     if (breakOut)
+                    {
                         break;
+                    }
                 }
             }
 
-            if (cowProcessing)
+            if (!cowProcessing)
             {
-                if (!cowFileTested)
-                {
-                    TestCowFile testCowFile = new TestCowFile(ref cowSpecified, cowFileLocation);
-                    breakOut = testCowFile.breakOut;
-                }
-
-                if (!breakOut)
-                {
-                    if (isFiglet)
-                        messageAsString = message.ToString();
-                    else
-                        messageAsString = message.ToString().Trim();
-
-                    string SpeechBubbleReturned = SpeechBubble.ReturnSpeechBubble(
-                        messageAsString,
-                        BubbleChars,
-                        columnSize,
-                        isFiglet);
-                    string CowReturned = GetCow.ReturnCow(cowSpecified, BubbleChars, face);
-
-                    Console.WriteLine(SpeechBubbleReturned + Environment.NewLine + CowReturned);
-                }
+                return;
             }
+
+            if (!cowFileTested)
+            {
+                var testCowFile = new TestCowFile(ref cowSpecified, cowFileLocation);
+                breakOut = testCowFile.BreakOut;
+            }
+
+            if (breakOut)
+            {
+                return;
+            }
+
+            var messageAsString = isFiglet ? message.ToString() : message.ToString().Trim();
+
+            var speechBubbleReturned = SpeechBubble.ReturnSpeechBubble(
+                messageAsString,
+                bubbleChars,
+                columnSize,
+                isFiglet);
+            var cowReturned = GetCow.ReturnCow(cowSpecified, bubbleChars, face);
+
+            Console.WriteLine(speechBubbleReturned + Environment.NewLine + cowReturned);
         }
     }
 }

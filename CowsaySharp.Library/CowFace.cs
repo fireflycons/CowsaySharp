@@ -1,12 +1,10 @@
 ﻿namespace CowsaySharp.Library
 {
-    using System;
-
     public class CowFace
     {
-        private string eyes;
+        private readonly bool threeEyes;
 
-        private bool ThreeEyes;
+        private string eyes;
 
         private string tongue;
 
@@ -29,35 +27,21 @@
         {
             this.Eyes = cowEyes;
             this.Tongue = cowTongue;
-            this.ThreeEyes = threeEyes;
+            this.threeEyes = threeEyes;
         }
 
         public string Eyes
         {
-            get
-            {
-                return this.eyes;
-            }
+            get => this.eyes;
 
-            set
-            {
-                if (this.ThreeEyes) this.eyes = value?.Substring(0, 3);
-                else this.eyes = value?.Substring(0, 2);
-            }
+            set => this.eyes = value?.Substring(0, this.threeEyes ? 3 : 2);
         }
 
         public string Tongue
         {
-            get
-            {
-                return this.tongue;
-            }
+            get => this.tongue;
 
-            set
-            {
-                if (string.IsNullOrEmpty(value)) this.tongue = "  ";
-                else this.tongue = value.Substring(0, 2);
-            }
+            set => this.tongue = string.IsNullOrEmpty(value) ? "  " : value.Substring(0, 2);
         }
     }
 }

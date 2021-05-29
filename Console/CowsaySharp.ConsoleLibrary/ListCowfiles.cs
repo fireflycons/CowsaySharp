@@ -10,63 +10,57 @@
 
     public static class ListCowfiles
     {
-        const string cowSearchPattern = "*.cow";
+        private const string CowSearchPattern = "*.cow";
 
-        const string cowsFolder = "cows";
+        private const string CowsFolder = "cows";
 
-        static private string cowFilesDirectory { get; set; }
+        private static string CowFilesDirectory { get; set; }
 
-        static public void ShowCowfiles(string directory, bool list)
+        public static void ShowCowfiles(string directory, bool list)
         {
-            cowFilesDirectory = $"{directory}\\{cowsFolder}";
+            CowFilesDirectory = $"{directory}\\{CowsFolder}";
 
-            if (!ValidateDirectory.validate(cowFilesDirectory))
-            {
-                throw new ArgumentException("Cow Files Path is not valid or not accessible", cowFilesDirectory);
-            }
+            if (!ValidateDirectory.validate(CowFilesDirectory))
+                throw new ArgumentException("Cow Files Path is not valid or not accessible", CowFilesDirectory);
 
-            IList<string> cowfiles = Directory.GetFiles(cowFilesDirectory, cowSearchPattern);
-            for (int i = 0; i < cowfiles.Count; i++)
+            IList<string> cowfiles = Directory.GetFiles(CowFilesDirectory, CowSearchPattern);
+            for (var i = 0; i < cowfiles.Count; i++)
             {
-                string cowfile = Path.GetFileNameWithoutExtension(cowfiles[i]);
+                var cowfile = Path.GetFileNameWithoutExtension(cowfiles[i]);
                 cowfiles[i] = cowfile;
             }
 
-            Console.WriteLine($"Cow files in {cowFilesDirectory}:");
+            Console.WriteLine($"Cow files in {CowFilesDirectory}:");
 
             if (list)
                 listInColumnsDown(cowfiles);
-            else if (!list)
-                listInBunch(cowfiles);
+            else listInBunch(cowfiles);
         }
 
-        static private void listInBunch(IList<string> cowfiles)
+        private static void listInBunch(IEnumerable<string> cowfiles)
         {
-            StringBuilder bunchBuilder = new StringBuilder();
-            foreach (string file in cowfiles)
-            {
-                bunchBuilder.Append($"{file} ");
-            }
+            var bunchBuilder = new StringBuilder();
+            foreach (var file in cowfiles) bunchBuilder.Append($"{file} ");
 
             Console.WriteLine(bunchBuilder.ToString().Trim());
         }
 
-        static private void listInColumnsDown(IList<string> cowfiles)
+        private static void listInColumnsDown(IList<string> cowfiles)
         {
-            List<string> returnList = new List<string>();
-            StringBuilder fullList = new StringBuilder();
-            const int numberOfColumns = 3;
-            int columnSize = (short)cowfiles.Max(s => s.Length) + 2;
-            int numberOfFiles = cowfiles.Count;
-            int numberOfLines = ((numberOfFiles - (numberOfFiles % numberOfColumns)) / numberOfColumns) + 1;
+            var returnList = new List<string>();
+            var fullList = new StringBuilder();
+            const int NumberOfColumns = 3;
+            var columnSize = (short)cowfiles.Max(s => s.Length) + 2;
+            var numberOfFiles = cowfiles.Count;
+            var numberOfLines = (numberOfFiles - (numberOfFiles % NumberOfColumns)) / NumberOfColumns + 1;
 
             for (int currentIndexOfFile = 0, currentRowOfColulmn = 0, currentColumn = 0;
-                 currentColumn < numberOfColumns && currentIndexOfFile < numberOfFiles;
+                 currentColumn < NumberOfColumns && currentIndexOfFile < numberOfFiles;
                  currentIndexOfFile++, currentRowOfColulmn++)
             {
-                StringBuilder sb = new StringBuilder();
-                string file = cowfiles[currentIndexOfFile];
-                string toAppend = string.Format($"{{0,-{columnSize}}}", file);
+                var sb = new StringBuilder();
+                var file = cowfiles[currentIndexOfFile];
+                var toAppend = string.Format($"{{0,-{columnSize}}}", file);
 
                 if (currentColumn == 0)
                 {
@@ -92,8 +86,10 @@
                 }
             }
 
-            foreach (string item in returnList)
+            foreach (var item in returnList)
+            {
                 fullList.AppendLine(item);
+            }
 
             Console.WriteLine(fullList.ToString().Trim());
         }

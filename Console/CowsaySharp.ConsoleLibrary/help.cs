@@ -3,11 +3,11 @@
     using System;
     using System.Windows.Forms;
 
-    static class Help
+    internal static class Help
     {
-        static public void DisplayHelp()
+        public static void DisplayHelp()
         {
-            string help = $@"CowsaySharp version {Application.ProductVersion}, (c) 2016 Terry Trent
+            var help = $@"CowsaySharp version {Application.ProductVersion}, (c) 2016 Terry Trent
 
   The original idea of cowsay come from:
     [Tony Monroe](http://www.nog.net/~tony/)

@@ -2,13 +2,13 @@
 {
     using System.IO;
 
-    static public class ValidateDirectory
+    public static class ValidateDirectory
     {
-        static public bool validate(string directory)
+        public static bool validate(string directory)
         {
             try
             {
-                var directoryAccess = Directory.GetAccessControl(directory);
+                Directory.GetAccessControl(directory);
                 return true;
             }
             catch
