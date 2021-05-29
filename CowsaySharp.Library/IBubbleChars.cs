@@ -5,16 +5,26 @@
     /// </summary>
     public interface IBubbleChars
     {
-        char TopLine { get; }
         char BottomLine { get; }
-        string UpLeft { get; }
-        string UpRight { get; }
-        string DownLeft { get; }
-        string DownRight { get; }
-        string Left { get; }
-        string Right { get; }
-        string SmallLeft { get; }
-        string SmallRight { get; }
+
         string Bubble { get; }
+
+        string DownLeft { get; }
+
+        string DownRight { get; }
+
+        string Left { get; }
+
+        string Right { get; }
+
+        string SmallLeft { get; }
+
+        string SmallRight { get; }
+
+        char TopLine { get; }
+
+        string UpLeft { get; }
+
+        string UpRight { get; }
     }
 }

@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.IO;
-
-namespace CowsaySharp.Library
+﻿namespace CowsaySharp.Library
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Text;
+
     static public class GetCow
     {
         static private StringBuilder cow;
@@ -34,6 +34,7 @@ namespace CowsaySharp.Library
                 cow.Replace("$eyes", eyesForReplacement);
                 cow.Replace("${eyes}", eyesForReplacement);
             }
+
             cow.Replace("$tongue", face.Tongue);
 
             if (cow.ToString().Substring(0, 1) == "\n")
@@ -67,6 +68,4 @@ namespace CowsaySharp.Library
             return cowToReturn;
         }
     }
-
-   
 }

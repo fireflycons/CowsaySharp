@@ -1,14 +1,14 @@
-﻿using CowsaySharp.Library;
-
-namespace CowsaySharp.Common
+﻿namespace CowsaySharp.Common
 {
+    using CowsaySharp.Library;
+
     public class ThinkBubbleChars : BubbleChars
     {
         public ThinkBubbleChars()
         {
-            UpLeft = DownLeft = Left = SmallLeft = "(";
-            UpRight = DownRight = Right = SmallRight = ")";
-            Bubble = "o";
+            this.UpLeft = this.DownLeft = this.Left = this.SmallLeft = "(";
+            this.UpRight = this.DownRight = this.Right = this.SmallRight = ")";
+            this.Bubble = "o";
         }
     }
 }

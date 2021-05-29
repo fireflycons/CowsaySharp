@@ -1,12 +1,14 @@
-﻿using System;
-using System.IO;
-using CowsaySharp.Common;
-
-namespace CowsaySharp.ConsoleLibrary
+﻿namespace CowsaySharp.ConsoleLibrary
 {
+    using System;
+    using System.IO;
+
+    using CowsaySharp.Common;
+
     public class TestCowFile
     {
         public bool breakOut;
+
         public bool cowProcessing;
 
         public TestCowFile(ref string cowSpecified, string cowFileLocation)
@@ -19,7 +21,8 @@ namespace CowsaySharp.ConsoleLibrary
 
                 if (cowSpecified.Substring(0, 1) == "\\" && cowSpecified.Substring(0, 2) != "\\\\")
                 {
-                    directory = $"{Directory.GetCurrentDirectory()}{cowSpecified.Substring(0, cowSpecified.IndexOf(cowFile))}";
+                    directory =
+                        $"{Directory.GetCurrentDirectory()}{cowSpecified.Substring(0, cowSpecified.IndexOf(cowFile))}";
                     cowSpecified = $"{directory}{cowFile}";
                 }
                 else
@@ -27,16 +30,17 @@ namespace CowsaySharp.ConsoleLibrary
 
                 if (!ValidateDirectory.validate(directory))
                 {
-                    Console.WriteLine($"The directory you specified is either invalid or cannot be accessed:\n{directory}");
-                    breakOut = true;
-                    cowProcessing = false;
+                    Console.WriteLine(
+                        $"The directory you specified is either invalid or cannot be accessed:\n{directory}");
+                    this.breakOut = true;
+                    this.cowProcessing = false;
                 }
 
-                if (cowFile.Length == 0 && !breakOut)
+                if (cowFile.Length == 0 && !this.breakOut)
                 {
                     Console.WriteLine($"You specified a directory but did not specify a Cow File.");
-                    breakOut = true;
-                    cowProcessing = false;
+                    this.breakOut = true;
+                    this.cowProcessing = false;
                 }
                 else if (!cowFile.EndsWith(".cow"))
                     cowSpecified += ".cow";
@@ -49,11 +53,11 @@ namespace CowsaySharp.ConsoleLibrary
                     cowSpecified = $"{cowSpecified}.cow";
             }
 
-            if (!breakOut && !ValidateFile.validate(cowSpecified))
+            if (!this.breakOut && !ValidateFile.validate(cowSpecified))
             {
                 Console.WriteLine($"The Cow File you specified does not exist or cannot be accessed:\n{cowSpecified}");
-                breakOut = true;
-                cowProcessing = false;
+                this.breakOut = true;
+                this.cowProcessing = false;
             }
         }
     }

@@ -1,10 +1,11 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-using CowsaySharp.Library;
-
-namespace CowsaySharp.ConsoleLibrary
+﻿namespace CowsaySharp.ConsoleLibrary
 {
+    using System;
+    using System.Linq;
+    using System.Text;
+
+    using CowsaySharp.Library;
+
     static public class Switches
     {
         static public void processSwitches(string[] args, string programDir, IBubbleChars BubbleChars)
@@ -145,7 +146,7 @@ namespace CowsaySharp.ConsoleLibrary
                             if (!cowProcessing)
                                 cowProcessing = true;
 
-                            if (String.IsNullOrWhiteSpace(face.Tongue))
+                            if (string.IsNullOrWhiteSpace(face.Tongue))
                             {
                                 face.Tongue = args[i + 1];
                             }
@@ -172,6 +173,7 @@ namespace CowsaySharp.ConsoleLibrary
                                 Help.DisplayHelp();
                                 breakOut = true;
                             }
+
                             break;
                         case 'l':
                             if (!cowProcessing)
@@ -179,6 +181,7 @@ namespace CowsaySharp.ConsoleLibrary
                                 ListCowfiles.ShowCowfiles(programDir, list: false);
                                 breakOut = true;
                             }
+
                             break;
                         case 'L':
                             if (!cowProcessing)
@@ -186,6 +189,7 @@ namespace CowsaySharp.ConsoleLibrary
                                 ListCowfiles.ShowCowfiles(programDir, list: true);
                                 breakOut = true;
                             }
+
                             break;
                         case '!':
                         default:
@@ -198,10 +202,12 @@ namespace CowsaySharp.ConsoleLibrary
                             i = numberOfArguments;
                             break;
                     }
+
                     if (breakOut)
                         break;
                 }
             }
+
             if (cowProcessing)
             {
                 if (!cowFileTested)
@@ -217,16 +223,16 @@ namespace CowsaySharp.ConsoleLibrary
                     else
                         messageAsString = message.ToString().Trim();
 
-                    string SpeechBubbleReturned = SpeechBubble.ReturnSpeechBubble(messageAsString, BubbleChars, columnSize, isFiglet);
+                    string SpeechBubbleReturned = SpeechBubble.ReturnSpeechBubble(
+                        messageAsString,
+                        BubbleChars,
+                        columnSize,
+                        isFiglet);
                     string CowReturned = GetCow.ReturnCow(cowSpecified, BubbleChars, face);
 
                     Console.WriteLine(SpeechBubbleReturned + Environment.NewLine + CowReturned);
                 }
             }
-
         }
-
-
-
     }
 }

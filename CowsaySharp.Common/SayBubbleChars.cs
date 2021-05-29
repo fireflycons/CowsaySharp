@@ -1,16 +1,16 @@
-﻿using CowsaySharp.Library;
-
-namespace CowsaySharp.Common
+﻿namespace CowsaySharp.Common
 {
+    using CowsaySharp.Library;
+
     public class SayBubbleChars : BubbleChars
     {
         public SayBubbleChars()
         {
-            UpLeft = DownRight = "/";
-            UpRight = DownLeft = Bubble = "\\";
-            Left = Right = "|";
-            SmallLeft = "<";
-            SmallRight = ">";
+            this.UpLeft = this.DownRight = "/";
+            this.UpRight = this.DownLeft = this.Bubble = "\\";
+            this.Left = this.Right = "|";
+            this.SmallLeft = "<";
+            this.SmallRight = ">";
         }
     }
 }

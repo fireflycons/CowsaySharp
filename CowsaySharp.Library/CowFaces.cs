@@ -1,31 +1,48 @@
-﻿using System.Collections.Generic;
-
-namespace CowsaySharp.Library
+﻿namespace CowsaySharp.Library
 {
+    using System.Collections.Generic;
+
     public static class CowFaces
     {
         public enum cowFaces
         {
             defaultFace,
+
             borg,
+
             dead,
+
             greedy,
+
             paranoid,
+
             stoned,
+
             tired,
+
             wired,
+
             young
         }
 
         static public Dictionary<cowFaces, CowFace> faces { get; private set; }
-        static private CowFace defaultFace { get; set; }
+
         static private CowFace borg { get; set; }
+
         static private CowFace dead { get; set; }
+
+        static private CowFace defaultFace { get; set; }
+
         static private CowFace greedy { get; set; }
+
         static private CowFace paranoid { get; set; }
+
         static private CowFace stoned { get; set; }
+
         static private CowFace tired { get; set; }
+
         static private CowFace wired { get; set; }
+
         static private CowFace young { get; set; }
 
         static public CowFace GetCowFace(cowFaces face)
@@ -61,6 +78,5 @@ namespace CowsaySharp.Library
             faces.Add(cowFaces.wired, wired);
             faces.Add(cowFaces.young, young);
         }
-
     }
 }

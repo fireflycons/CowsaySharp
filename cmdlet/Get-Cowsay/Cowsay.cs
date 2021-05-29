@@ -1,18 +1,20 @@
-﻿using System;
-
-namespace CowsaySharp.GetCowsay.Containers
+﻿namespace CowsaySharp.GetCowsay.Containers
 {
+    using System;
+
     class Cowsay
     {
-        public string Speech_Bubble { get; set; }
-        public string Cow { get; set; }
-        public string SpeechBubbleAndCow { get; set; }
-
         public Cowsay(string cow, string speechBubble)
         {
-            Speech_Bubble = speechBubble;
-            Cow = cow;
-            SpeechBubbleAndCow = $"{Speech_Bubble}{Environment.NewLine}{Cow}";
+            this.Speech_Bubble = speechBubble;
+            this.Cow = cow;
+            this.SpeechBubbleAndCow = $"{this.Speech_Bubble}{Environment.NewLine}{this.Cow}";
         }
+
+        public string Cow { get; set; }
+
+        public string Speech_Bubble { get; set; }
+
+        public string SpeechBubbleAndCow { get; set; }
     }
 }

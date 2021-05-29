@@ -1,8 +1,8 @@
-﻿using System;
-using System.Windows.Forms;
-
-namespace CowsaySharp.ConsoleLibrary
+﻿namespace CowsaySharp.ConsoleLibrary
 {
+    using System;
+    using System.Windows.Forms;
+
     static class Help
     {
         static public void DisplayHelp()
@@ -16,8 +16,7 @@ namespace CowsaySharp.ConsoleLibrary
 Usage: cowsay [-bdgpstwy] [-h] [-e eyes] [-f cowfile] 
           [-l] [-L] [-n] [-T tongue] [-W wrapcolumn] [message]";
 
-          Console.WriteLine(help);
-
+            Console.WriteLine(help);
         }
     }
 }

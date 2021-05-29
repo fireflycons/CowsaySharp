@@ -1,43 +1,63 @@
-﻿using System;
-using System.Management.Automation;
-using CowsaySharp.GetCowsay.Containers;
-using CowsaySharp.Library;
-using CowsaySharp.ConsoleLibrary;
-using System.IO;
-using System.Reflection;
-
-namespace CowsaySharp.GetCowsay
+﻿namespace CowsaySharp.GetCowsay
 {
+    using System;
+    using System.IO;
+    using System.Management.Automation;
+    using System.Reflection;
+
     using CowsaySharp.Common;
+    using CowsaySharp.ConsoleLibrary;
+    using CowsaySharp.GetCowsay.Containers;
+    using CowsaySharp.Library;
 
     [Cmdlet(VerbsCommon.Get, "Cowsay")]
     [OutputType(typeof(Cowsay))]
     public class GetCowsayCmdlet : Cmdlet
     {
-        [Parameter]
-        [ValidateSet("borg","dead","greedy","paranoid","stoned","tired","wired","young")]
-        [Alias("m")]
-        public string mode { get; set; }
+        private int _wrapcolumn = 40;
+
+        bool breakOut;
+
+        IBubbleChars bubbleChars;
+
+        string cowFileLocation;
+
+        string cowSpecified;
+
+        CowFace face;
+
+        string moduleDirectory;
 
         [Parameter]
-        [Alias("l")]
-        public SwitchParameter list { get; set; }
-
-        [Parameter]
-        [Alias("n")]
-        public SwitchParameter figlet { get; set; }
+        [Alias("f")]
+        public string cowfile { get; set; }
 
         [Parameter]
         [Alias("e")]
         public string eyes { get; set; }
 
         [Parameter]
-        [Alias("T")]
-        public string tongue { get; set; }
+        [Alias("n")]
+        public SwitchParameter figlet { get; set; }
 
         [Parameter]
-        [Alias("f")]
-        public string cowfile { get; set; }
+        [Alias("l")]
+        public SwitchParameter list { get; set; }
+
+        [Parameter(ValueFromPipeline = true, Position = 0)]
+        public string message { get; set; }
+
+        [Parameter]
+        [ValidateSet("borg", "dead", "greedy", "paranoid", "stoned", "tired", "wired", "young")]
+        [Alias("m")]
+        public string mode { get; set; }
+
+        [Parameter]
+        public SwitchParameter think { get; set; }
+
+        [Parameter]
+        [Alias("T")]
+        public string tongue { get; set; }
 
         [Parameter]
         [Alias("W")]
@@ -45,126 +65,116 @@ namespace CowsaySharp.GetCowsay
         {
             get
             {
-                return _wrapcolumn;
+                return this._wrapcolumn;
             }
+
             set
             {
-                _wrapcolumn = value;
+                this._wrapcolumn = value;
             }
         }
 
-        [Parameter]
-        public SwitchParameter think { get; set; }
-
-        [Parameter(ValueFromPipeline = true,Position = 0)]
-        public string message { get; set; }
-
-        IBubbleChars bubbleChars;
-        private int _wrapcolumn = 40;
-        string moduleDirectory;
-        string cowFileLocation;
-        string cowSpecified;
-        bool breakOut;
-        CowFace face;
-
         protected override void BeginProcessing()
         {
-            moduleDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            cowFileLocation = $"{moduleDirectory}\\cows";
-            cowSpecified = $"{cowFileLocation}\\default.cow";
-            face = new CowFace();
+            this.moduleDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            this.cowFileLocation = $"{this.moduleDirectory}\\cows";
+            this.cowSpecified = $"{this.cowFileLocation}\\default.cow";
+            this.face = new CowFace();
 
-            if (!String.IsNullOrEmpty(mode))
+            if (!string.IsNullOrEmpty(this.mode))
             {
-                switch (mode)
+                switch (this.mode)
                 {
                     case "borg":
-                        face = CowFaces.GetCowFace(CowFaces.cowFaces.borg);
+                        this.face = CowFaces.GetCowFace(CowFaces.cowFaces.borg);
                         break;
                     case "dead":
-                        face = CowFaces.GetCowFace(CowFaces.cowFaces.dead);
+                        this.face = CowFaces.GetCowFace(CowFaces.cowFaces.dead);
                         break;
                     case "greedy":
-                        face = CowFaces.GetCowFace(CowFaces.cowFaces.greedy);
+                        this.face = CowFaces.GetCowFace(CowFaces.cowFaces.greedy);
                         break;
                     case "paranoid":
-                        face = CowFaces.GetCowFace(CowFaces.cowFaces.paranoid);
+                        this.face = CowFaces.GetCowFace(CowFaces.cowFaces.paranoid);
                         break;
                     case "stoned":
-                        face = CowFaces.GetCowFace(CowFaces.cowFaces.stoned);
+                        this.face = CowFaces.GetCowFace(CowFaces.cowFaces.stoned);
                         break;
                     case "tired":
-                        face = CowFaces.GetCowFace(CowFaces.cowFaces.tired);
+                        this.face = CowFaces.GetCowFace(CowFaces.cowFaces.tired);
                         break;
                     case "wired":
-                        face = CowFaces.GetCowFace(CowFaces.cowFaces.wired);
+                        this.face = CowFaces.GetCowFace(CowFaces.cowFaces.wired);
                         break;
                     case "young":
-                        face = CowFaces.GetCowFace(CowFaces.cowFaces.young);
+                        this.face = CowFaces.GetCowFace(CowFaces.cowFaces.young);
                         break;
                 }
             }
 
-            if (!String.IsNullOrEmpty(eyes) && String.IsNullOrWhiteSpace(face.Eyes))
-                face = new CowFace(eyes);
+            if (!string.IsNullOrEmpty(this.eyes) && string.IsNullOrWhiteSpace(this.face.Eyes))
+                this.face = new CowFace(this.eyes);
 
-            if (String.IsNullOrEmpty(face.Eyes))
-                face = CowFaces.GetCowFace(CowFaces.cowFaces.defaultFace);
+            if (string.IsNullOrEmpty(this.face.Eyes)) this.face = CowFaces.GetCowFace(CowFaces.cowFaces.defaultFace);
 
-            if (!String.IsNullOrEmpty(tongue) && String.IsNullOrWhiteSpace(face.Tongue))
-                face.Tongue = tongue;
+            if (!string.IsNullOrEmpty(this.tongue) && string.IsNullOrWhiteSpace(this.face.Tongue))
+                this.face.Tongue = this.tongue;
 
-
-            if (!String.IsNullOrEmpty(cowfile))
+            if (!string.IsNullOrEmpty(this.cowfile))
             {
-                cowSpecified = cowfile;
-                TestCowFile testCowFile = new TestCowFile(ref cowSpecified, cowFileLocation);
-                breakOut = testCowFile.breakOut;
+                this.cowSpecified = this.cowfile;
+                TestCowFile testCowFile = new TestCowFile(ref this.cowSpecified, this.cowFileLocation);
+                this.breakOut = testCowFile.breakOut;
             }
             else
             {
-                TestCowFile testCowFile = new TestCowFile(ref cowSpecified, cowFileLocation);
-                breakOut = testCowFile.breakOut;
+                TestCowFile testCowFile = new TestCowFile(ref this.cowSpecified, this.cowFileLocation);
+                this.breakOut = testCowFile.breakOut;
             }
 
-            if (wrapcolumn < 10 | wrapcolumn > 76)
-                ThrowTerminatingError(new ErrorRecord(new ArgumentOutOfRangeException(nameof(wrapcolumn), "Cannot specify a size smaller than 10 characters or larger than 76 characters"), "E1", ErrorCategory.LimitsExceeded, this));
+            if (this.wrapcolumn < 10 | this.wrapcolumn > 76)
+                this.ThrowTerminatingError(
+                    new ErrorRecord(
+                        new ArgumentOutOfRangeException(
+                            nameof(this.wrapcolumn),
+                            "Cannot specify a size smaller than 10 characters or larger than 76 characters"),
+                        "E1",
+                        ErrorCategory.LimitsExceeded,
+                        this));
 
-            if (think)
+            if (this.think)
             {
-                bubbleChars = new ThinkBubbleChars();
+                this.bubbleChars = new ThinkBubbleChars();
             }
             else
             {
-                bubbleChars = new SayBubbleChars();
+                this.bubbleChars = new SayBubbleChars();
             }
         }
 
         protected override void ProcessRecord()
         {
-            if (list)
+            if (this.list)
             {
                 Console.WriteLine();
-                ListCowfiles.ShowCowfiles(moduleDirectory, list: true);
+                ListCowfiles.ShowCowfiles(this.moduleDirectory, list: true);
                 Console.WriteLine();
-                breakOut = true;
+                this.breakOut = true;
             }
-            else if (String.IsNullOrWhiteSpace(message))
+            else if (string.IsNullOrWhiteSpace(this.message))
                 Console.WriteLine();
-            else if (!breakOut)
-                WriteObject(BuildCowsay());
-            
-           
+            else if (!this.breakOut) this.WriteObject(this.BuildCowsay());
         }
 
         private Cowsay BuildCowsay()
         {
-            string SpeechBubbleReturned = SpeechBubble.ReturnSpeechBubble(message, bubbleChars, wrapcolumn, figlet);
-            string CowReturned = GetCow.ReturnCow(cowSpecified, bubbleChars, face);
+            string SpeechBubbleReturned = SpeechBubble.ReturnSpeechBubble(
+                this.message,
+                this.bubbleChars,
+                this.wrapcolumn,
+                this.figlet);
+            string CowReturned = GetCow.ReturnCow(this.cowSpecified, this.bubbleChars, this.face);
             return new Cowsay(CowReturned, SpeechBubbleReturned);
         }
-
-        
     }
 }
-

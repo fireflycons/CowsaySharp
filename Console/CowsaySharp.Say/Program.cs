@@ -1,11 +1,11 @@
-﻿using System.IO;
-using System.Reflection;
-using CowsaySharp.Library;
-using CowsaySharp.ConsoleLibrary;
-
-namespace CowsaySharp.Say
+﻿namespace CowsaySharp.Say
 {
+    using System.IO;
+    using System.Reflection;
+
     using CowsaySharp.Common;
+    using CowsaySharp.ConsoleLibrary;
+    using CowsaySharp.Library;
 
     class Program
     {
