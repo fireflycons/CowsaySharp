@@ -67,54 +67,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\cowsaysharp.common\StringArrayOfFilesToList.cs">
-      <Link>CowsaySharp.Common\StringArrayOfFilesToList.cs</Link>
-    </Compile>
-    <Compile Include="..\..\CowsaySharp.Common\ThinkBubbleChars.cs">
-      <Link>CowsaySharp.Common\ThinkBubbleChars.cs</Link>
-    </Compile>
-    <Compile Include="..\..\cowsaysharp.common\ValidateDirectory.cs">
-      <Link>CowsaySharp.Common\ValidateDirectory.cs</Link>
-    </Compile>
-    <Compile Include="..\..\cowsaysharp.common\ValidateFile.cs">
-      <Link>CowsaySharp.Common\ValidateFile.cs</Link>
-    </Compile>
-    <Compile Include="..\..\CowsaySharp.Library\BubbleChars.cs">
-      <Link>CowsaySharp.Library\BubbleChars.cs</Link>
-    </Compile>
-    <Compile Include="..\..\cowsaysharp.library\CowFace.cs">
-      <Link>CowsaySharp.Library\CowFace.cs</Link>
-    </Compile>
-    <Compile Include="..\..\cowsaysharp.library\CowFaces.cs">
-      <Link>CowsaySharp.Library\CowFaces.cs</Link>
-    </Compile>
-    <Compile Include="..\..\cowsaysharp.library\GetCow.cs">
-      <Link>CowsaySharp.Library\GetCow.cs</Link>
-    </Compile>
-    <Compile Include="..\..\CowsaySharp.Library\IBubbleChars.cs">
-      <Link>CowsaySharp.Library\IBubbleChars.cs</Link>
-    </Compile>
-    <Compile Include="..\..\CowsaySharp.Library\SayBubbleChars.cs">
-      <Link>CowsaySharp.Library\SayBubbleChars.cs</Link>
-    </Compile>
-    <Compile Include="..\..\cowsaysharp.library\SpeechBubble.cs">
-      <Link>CowsaySharp.Library\SpeechBubble.cs</Link>
-    </Compile>
-    <Compile Include="..\..\CowsaySharp.Library\ThinkBubbleChars.cs">
-      <Link>CowsaySharp.Library\ThinkBubbleChars.cs</Link>
-    </Compile>
-    <Compile Include="..\cowsaysharp.consolelibrary\Help.cs">
-      <Link>CowsaySharp.ConsoleLibrary\Help.cs</Link>
-    </Compile>
-    <Compile Include="..\cowsaysharp.consolelibrary\ListCowfiles.cs">
-      <Link>CowsaySharp.ConsoleLibrary\ListCowfiles.cs</Link>
-    </Compile>
-    <Compile Include="..\cowsaysharp.consolelibrary\switches.cs">
-      <Link>CowsaySharp.ConsoleLibrary\switches.cs</Link>
-    </Compile>
-    <Compile Include="..\cowsaysharp.consolelibrary\TestCowFile.cs">
-      <Link>CowsaySharp.ConsoleLibrary\TestCowFile.cs</Link>
-    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -314,7 +266,16 @@
       <Project>{6d729d6a-27f3-4a1a-bb97-91d10e864cf6}</Project>
       <Name>CowsaySharp.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\CowsaySharp.Library\CowsaySharp.Library.csproj">
+      <Project>{ecd6463c-4829-4271-b8c0-8f72f868e96c}</Project>
+      <Name>CowsaySharp.Library</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CowsaySharp.ConsoleLibrary\CowsaySharp.ConsoleLibrary.csproj">
+      <Project>{bc1058d1-4a6a-499f-9fe8-b5c9cf47976a}</Project>
+      <Name>CowsaySharp.ConsoleLibrary</Name>
+    </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

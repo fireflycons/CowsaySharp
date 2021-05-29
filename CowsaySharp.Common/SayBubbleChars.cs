@@ -2,7 +2,7 @@
 
 namespace CowsaySharp.Common
 {
-    class SayBubbleChars : BubbleChars
+    public class SayBubbleChars : BubbleChars
     {
         public SayBubbleChars()
         {

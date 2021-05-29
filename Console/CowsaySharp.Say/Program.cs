@@ -5,6 +5,8 @@ using CowsaySharp.ConsoleLibrary;
 
 namespace CowsaySharp.Say
 {
+    using CowsaySharp.Common;
+
     class Program
     {
         static public string strAppDir;

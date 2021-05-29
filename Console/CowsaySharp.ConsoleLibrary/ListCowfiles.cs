@@ -7,7 +7,7 @@ using CowsaySharp.Common;
 
 namespace CowsaySharp.ConsoleLibrary
 {
-    static class ListCowfiles
+    public static class ListCowfiles
     {
         const string cowSearchPattern = "*.cow";
         const string cowsFolder = "cows";

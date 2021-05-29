@@ -8,6 +8,8 @@ using System.Reflection;
 
 namespace CowsaySharp.GetCowsay
 {
+    using CowsaySharp.Common;
+
     [Cmdlet(VerbsCommon.Get, "Cowsay")]
     [OutputType(typeof(Cowsay))]
     public class GetCowsayCmdlet : Cmdlet
