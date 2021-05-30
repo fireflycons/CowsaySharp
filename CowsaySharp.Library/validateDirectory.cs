@@ -1,14 +1,14 @@
-﻿namespace CowsaySharp.Common
+﻿namespace CowsaySharp.Library
 {
     using System.IO;
 
-    public static class ValidateFile
+    public static class ValidateDirectory
     {
-        public static bool validate(string file)
+        public static bool validate(string directory)
         {
             try
             {
-                File.GetAccessControl(file);
+                Directory.GetAccessControl(directory);
                 return true;
             }
             catch

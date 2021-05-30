@@ -5,7 +5,6 @@
     using System.Management.Automation;
     using System.Reflection;
 
-    using CowsaySharp.Common;
     using CowsaySharp.ConsoleLibrary;
     using CowsaySharp.Library;
 

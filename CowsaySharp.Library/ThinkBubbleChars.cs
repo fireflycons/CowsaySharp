@@ -1,7 +1,5 @@
-﻿namespace CowsaySharp.Common
+﻿namespace CowsaySharp.Library
 {
-    using CowsaySharp.Library;
-
     public class ThinkBubbleChars : BubbleChars
     {
         public ThinkBubbleChars()

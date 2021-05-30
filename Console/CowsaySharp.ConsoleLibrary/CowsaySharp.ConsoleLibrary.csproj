@@ -75,10 +75,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\CowsaySharp.Common\CowsaySharp.Common.csproj">
-      <Project>{6d729d6a-27f3-4a1a-bb97-91d10e864cf6}</Project>
-      <Name>CowsaySharp.Common</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\CowsaySharp.Library\CowsaySharp.Library.csproj">
       <Project>{ecd6463c-4829-4271-b8c0-8f72f868e96c}</Project>
       <Name>CowsaySharp.Library</Name>

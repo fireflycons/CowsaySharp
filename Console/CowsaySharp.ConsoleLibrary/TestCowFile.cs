@@ -3,7 +3,7 @@
     using System;
     using System.IO;
 
-    using CowsaySharp.Common;
+    using CowsaySharp.Library;
 
     public class TestCowFile
     {

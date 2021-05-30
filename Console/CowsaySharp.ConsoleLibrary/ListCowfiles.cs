@@ -6,7 +6,7 @@
     using System.Linq;
     using System.Text;
 
-    using CowsaySharp.Common;
+    using CowsaySharp.Library;
 
     public static class ListCowfiles
     {
