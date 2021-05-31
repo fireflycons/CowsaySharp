@@ -4,9 +4,9 @@
 
     public static class CowFaces
     {
-        private static readonly Dictionary<FaceTypes, CowFace> FaceDictionary = new Dictionary<FaceTypes, CowFace>
+        private static readonly Dictionary<FaceTypes, ICowFace> FaceDictionary = new Dictionary<FaceTypes, ICowFace>
                                                                                     {
-                                                                                        { FaceTypes.DefaultFace, new CowFace("oo") },
+                                                                                        { FaceTypes.DefaultFace, new DefaultCowFace() },
                                                                                         { FaceTypes.Borg, new CowFace("==") },
                                                                                         { FaceTypes.Dead, new CowFace("xx", "U ") },
                                                                                         { FaceTypes.Greedy, new CowFace("$$") },
@@ -38,7 +38,7 @@
             Young
         }
 
-        public static CowFace GetCowFace(FaceTypes face)
+        public static ICowFace GetCowFace(FaceTypes face)
         {
             FaceDictionary.TryGetValue(face, out var value);
 

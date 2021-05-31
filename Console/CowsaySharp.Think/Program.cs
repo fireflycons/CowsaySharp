@@ -1,5 +1,6 @@
 ﻿namespace CowsaySharp.Think
 {
+    using System;
     using System.IO;
     using System.Reflection;
 
@@ -10,10 +11,18 @@
     {
         static void Main(string[] args)
         {
-            Switches.processSwitches(
+            var options = Switches.ProcessSwitches(
                 args,
                 Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
                 new ThinkBubbleChars());
+
+            if (options == null)
+            {
+                return;
+            }
+
+            var cow = new CowSay(options);
+            cow.Render(Console.WriteLine);
         }
     }
 }

@@ -18,29 +18,53 @@
 
         public static void ShowCowfiles(string directory, bool list)
         {
-            CowFilesDirectory = $"{directory}\\{CowsFolder}";
+            var cowResources = CowResource.ListCowResources();
 
-            if (!ValidateDirectory.validate(CowFilesDirectory))
-                throw new ArgumentException("Cow Files Path is not valid or not accessible", CowFilesDirectory);
+            Console.WriteLine("Built-in cow files:");
 
-            IList<string> cowfiles = Directory.GetFiles(CowFilesDirectory, CowSearchPattern);
-            for (var i = 0; i < cowfiles.Count; i++)
+            if (list)
             {
-                var cowfile = Path.GetFileNameWithoutExtension(cowfiles[i]);
-                cowfiles[i] = cowfile;
+                listInColumnsDown(cowResources.ToList());
+            }
+            else
+            {
+                listInBunch(cowResources);
+            }
+
+            CowFilesDirectory = $"{directory}\\{CowsFolder}";
+            if (!ValidateDirectory.validate(CowFilesDirectory))
+            {
+                Console.WriteLine("Cow Files Path is not valid or not accessible");
+                return;
+            }
+
+            var cowfiles = Directory.EnumerateFiles(CowFilesDirectory, CowSearchPattern)
+                .Select(Path.GetFileNameWithoutExtension).ToList();
+
+            if (!cowfiles.Any())
+            {
+                return;
             }
 
             Console.WriteLine($"Cow files in {CowFilesDirectory}:");
 
             if (list)
+            {
                 listInColumnsDown(cowfiles);
-            else listInBunch(cowfiles);
+            }
+            else
+            {
+                listInBunch(cowfiles);
+            }
         }
 
         private static void listInBunch(IEnumerable<string> cowfiles)
         {
             var bunchBuilder = new StringBuilder();
-            foreach (var file in cowfiles) bunchBuilder.Append($"{file} ");
+            foreach (var file in cowfiles)
+            {
+                bunchBuilder.Append($"{file} ");
+            }
 
             Console.WriteLine(bunchBuilder.ToString().Trim());
         }

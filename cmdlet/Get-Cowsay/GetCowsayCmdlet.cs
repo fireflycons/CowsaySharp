@@ -9,7 +9,7 @@
     using CowsaySharp.Library;
 
     [Cmdlet(VerbsCommon.Get, "Cowsay")]
-    [OutputType(typeof(Cowsay))]
+    [OutputType(typeof(CowSay))]
     public class GetCowsayCmdlet : Cmdlet
     {
         bool breakOut;
@@ -20,7 +20,7 @@
 
         string cowSpecified;
 
-        CowFace face;
+        ICowFace face;
 
         string moduleDirectory;
 
@@ -64,7 +64,7 @@
             this.moduleDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             this.cowFileLocation = $"{this.moduleDirectory}\\cows";
             this.cowSpecified = $"{this.cowFileLocation}\\default.cow";
-            this.face = new CowFace();
+            this.face = CowFaces.GetCowFace(CowFaces.FaceTypes.DefaultFace);
 
             if (!string.IsNullOrEmpty(this.Mode))
             {
@@ -115,16 +115,9 @@
             if (!string.IsNullOrEmpty(this.Cowfile))
             {
                 this.cowSpecified = this.Cowfile;
-                var testCowFile = new TestCowFile(ref this.cowSpecified, this.cowFileLocation);
-                this.breakOut = testCowFile.BreakOut;
-            }
-            else
-            {
-                var testCowFile = new TestCowFile(ref this.cowSpecified, this.cowFileLocation);
-                this.breakOut = testCowFile.BreakOut;
             }
 
-            if (this.Wrapcolumn < 10 | this.Wrapcolumn > 76)
+            if (this.Wrapcolumn < 10 || this.Wrapcolumn > 76)
             {
                 this.ThrowTerminatingError(
                     new ErrorRecord(
@@ -146,6 +139,9 @@
             }
         }
 
+        /// <summary>
+        /// Processes the record.
+        /// </summary>
         protected override void ProcessRecord()
         {
             if (this.List)
@@ -165,11 +161,16 @@
             }
         }
 
-        private Cowsay BuildCowsay()
+        /// <summary>
+        /// Builds the cowsay.
+        /// </summary>
+        /// <returns>New <see cref="CowSay"/></returns>
+        private CowSay BuildCowsay()
         {
-            return new Cowsay(
-                GetCow.ReturnCow(this.cowSpecified, this.bubbleChars, this.face),
-                SpeechBubble.ReturnSpeechBubble(this.Message, this.bubbleChars, this.Wrapcolumn, this.Figlet));
+            return new CowSay(
+                AbstractCowFile.GetCowFile(this.cowSpecified),
+                new SpeechBubble(this.Message, this.bubbleChars, this.Wrapcolumn, this.Figlet),
+                this.face);
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace CowsaySharp.Library
 {
-    public class CowFace
+    public class CowFace : ICowFace
     {
         private readonly bool threeEyes;
 

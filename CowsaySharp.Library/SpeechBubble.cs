@@ -5,47 +5,63 @@
     using System.Linq;
     using System.Text;
 
-    public static class SpeechBubble
+    public class SpeechBubble
     {
-        public static string ReturnSpeechBubble(string message, IBubbleChars bubbles, int? maxLineLength, bool figlet)
+        private readonly bool figlet;
+
+        private int? maxLineLength;
+
+        private string message;
+
+        public SpeechBubble(string message, IBubbleChars bubbleChars, int? maxLineLength, bool figlet)
+        {
+            this.figlet = figlet;
+            this.maxLineLength = maxLineLength;
+            this.BubbleChars = bubbleChars;
+            this.message = message;
+        }
+
+        public IBubbleChars BubbleChars { get; }
+
+        public string ReturnSpeechBubble()
         {
             char[] splitChar = { ' ', (char)10, (char)13 };
             var messageAsList = new List<string>();
 
-            if (!maxLineLength.HasValue)
+            if (!this.maxLineLength.HasValue)
             {
-                maxLineLength = 40;
+                this.maxLineLength = 40;
             }
-            else if (maxLineLength > 76 || maxLineLength < 10)
+            else if (this.maxLineLength > 76 || this.maxLineLength < 10)
             {
                 throw new ArgumentOutOfRangeException(
-                    nameof(maxLineLength),
+                    nameof(this.maxLineLength),
                     "Cannot specify a size smaller than 10 characters or larger than 76 characters");
             }
 
-            if (figlet)
+            if (this.figlet)
             {
-                messageAsList = SplitFigletToLinesAsList(message);
+                messageAsList = SplitFigletToLinesAsList(this.message);
             }
-            else if (message.Length > maxLineLength)
+            else if (this.message.Length > this.maxLineLength)
             {
-                messageAsList = SplitToLinesAsList(message, splitChar, (int)maxLineLength);
+                messageAsList = SplitToLinesAsList(this.message, splitChar, (int)this.maxLineLength);
             }
-            else if (message.Length < maxLineLength && message.IndexOfAny(splitChar) != -1)
+            else if (this.message.Length < this.maxLineLength && this.message.IndexOfAny(splitChar) != -1)
             {
-                messageAsList = SplitToLinesAsListShort(message);
+                messageAsList = SplitToLinesAsListShort(this.message);
             }
 
-            if (message.Length > maxLineLength || messageAsList.Count > 1)
+            if (this.message.Length > this.maxLineLength || messageAsList.Count > 1)
             {
-                message = createLargeWordBubble(messageAsList, bubbles);
+                this.message = createLargeWordBubble(messageAsList, this.BubbleChars);
             }
             else
             {
-                message = createSmallWordBubble(message, bubbles);
+                this.message = createSmallWordBubble(this.message, this.BubbleChars);
             }
 
-            return message;
+            return this.message;
         }
 
         private static string createLargeWordBubble(IReadOnlyList<string> list, IBubbleChars bubbles)
