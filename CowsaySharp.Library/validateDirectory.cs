@@ -8,7 +8,7 @@
         {
             try
             {
-                Directory.GetAccessControl(directory);
+                Directory.GetCreationTime(directory);
                 return true;
             }
             catch

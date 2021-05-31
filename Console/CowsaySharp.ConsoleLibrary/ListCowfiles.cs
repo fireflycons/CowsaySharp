@@ -78,9 +78,9 @@
             var numberOfFiles = cowfiles.Count;
             var numberOfLines = (numberOfFiles - (numberOfFiles % NumberOfColumns)) / NumberOfColumns + 1;
 
-            for (int currentIndexOfFile = 0, currentRowOfColulmn = 0, currentColumn = 0;
+            for (int currentIndexOfFile = 0, currentRowOfColumn = 0, currentColumn = 0;
                  currentColumn < NumberOfColumns && currentIndexOfFile < numberOfFiles;
-                 currentIndexOfFile++, currentRowOfColulmn++)
+                 currentIndexOfFile++, currentRowOfColumn++)
             {
                 var sb = new StringBuilder();
                 var file = cowfiles[currentIndexOfFile];
@@ -93,20 +93,20 @@
                 }
                 else
                 {
-                    sb.Append(returnList[currentRowOfColulmn - 1]);
+                    sb.Append(returnList[currentRowOfColumn - 1]);
                     sb.Append(toAppend);
-                    returnList[currentRowOfColulmn - 1] = sb.ToString();
+                    returnList[currentRowOfColumn - 1] = sb.ToString();
                 }
 
-                if (currentRowOfColulmn == numberOfLines - 1 && currentColumn == 0)
+                if (currentRowOfColumn == numberOfLines - 1 && currentColumn == 0)
                 {
                     currentColumn++;
-                    currentRowOfColulmn = 0;
+                    currentRowOfColumn = 0;
                 }
-                else if (currentRowOfColulmn == numberOfLines)
+                else if (currentRowOfColumn == numberOfLines)
                 {
                     currentColumn++;
-                    currentRowOfColulmn = 0;
+                    currentRowOfColumn = 0;
                 }
             }
 

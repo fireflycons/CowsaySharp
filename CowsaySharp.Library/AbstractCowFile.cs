@@ -52,7 +52,7 @@
 
             try
             {
-                File.GetAccessControl(cowFile);
+                File.GetAttributes(cowFile);
                 return new CowFile(cowFile);
             }
             catch

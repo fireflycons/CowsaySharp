@@ -1,13 +1,12 @@
 ﻿namespace CowsaySharp.ConsoleLibrary
 {
     using System;
-    using System.Windows.Forms;
 
     internal static class Help
     {
         public static void DisplayHelp()
         {
-            var help = $@"CowsaySharp version {Application.ProductVersion}, (c) 2016 Terry Trent
+            var help = $@"CowsaySharp, (c) 2016 Terry Trent
 
   The original idea of cowsay come from:
     [Tony Monroe](http://www.nog.net/~tony/)

@@ -8,7 +8,7 @@
         {
             try
             {
-                File.GetAccessControl(file);
+                File.GetAttributes(file);
                 return true;
             }
             catch
