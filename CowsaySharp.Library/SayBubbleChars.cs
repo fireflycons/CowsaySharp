@@ -1,7 +1,14 @@
 ﻿namespace CowsaySharp.Library
 {
+    /// <summary>
+    /// Describes characters that make up the borders of a speech bubble.
+    /// </summary>
+    /// <seealso cref="CowsaySharp.Library.BubbleChars" />
     public class SayBubbleChars : BubbleChars
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SayBubbleChars"/> class.
+        /// </summary>
         public SayBubbleChars()
         {
             this.UpLeft = this.DownRight = "/";

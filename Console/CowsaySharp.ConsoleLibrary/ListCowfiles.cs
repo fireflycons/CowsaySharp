@@ -8,21 +8,26 @@
 
     using CowsaySharp.Library;
 
+    /// <summary>
+    /// Manages directory listing of cow files
+    /// </summary>
     public static class ListCowfiles
     {
-        private const string CowSearchPattern = "*.cow";
-
-        private const string CowsFolder = "cows";
-
-        private static string CowFilesDirectory { get; set; }
-
-        public static void ShowCowfiles(string directory, bool list)
+        /// <summary>
+        /// Shows the cow files.
+        /// </summary>
+        /// <param name="directory">The directory.</param>
+        /// <param name="listInColumns">if set to <c>true</c> list in columns.</param>
+        public static void ShowCowfiles(string directory, bool listInColumns)
         {
+            const string CowSearchPattern = "*.cow";
+            const string CowsFolder = "cows";
+
             var cowResources = CowResource.ListCowResources();
 
             Console.WriteLine("Built-in cow files:");
 
-            if (list)
+            if (listInColumns)
             {
                 listInColumnsDown(cowResources.ToList());
             }
@@ -31,14 +36,15 @@
                 listInBunch(cowResources);
             }
 
-            CowFilesDirectory = $"{directory}\\{CowsFolder}";
-            if (!ValidateDirectory.validate(CowFilesDirectory))
+            var cowFilesDirectory = $"{directory}\\{CowsFolder}";
+
+            if (!ValidateDirectory.validate(cowFilesDirectory))
             {
                 Console.WriteLine("Cow Files Path is not valid or not accessible");
                 return;
             }
 
-            var cowfiles = Directory.EnumerateFiles(CowFilesDirectory, CowSearchPattern)
+            var cowfiles = Directory.EnumerateFiles(cowFilesDirectory, CowSearchPattern)
                 .Select(Path.GetFileNameWithoutExtension).ToList();
 
             if (!cowfiles.Any())
@@ -46,9 +52,9 @@
                 return;
             }
 
-            Console.WriteLine($"Cow files in {CowFilesDirectory}:");
+            Console.WriteLine($"Cow files in {cowFilesDirectory}:");
 
-            if (list)
+            if (listInColumns)
             {
                 listInColumnsDown(cowfiles);
             }
@@ -76,7 +82,7 @@
             const int NumberOfColumns = 3;
             var columnSize = (short)cowfiles.Max(s => s.Length) + 2;
             var numberOfFiles = cowfiles.Count;
-            var numberOfLines = (numberOfFiles - (numberOfFiles % NumberOfColumns)) / NumberOfColumns + 1;
+            var numberOfLines = (numberOfFiles - numberOfFiles % NumberOfColumns) / NumberOfColumns + 1;
 
             for (int currentIndexOfFile = 0, currentRowOfColumn = 0, currentColumn = 0;
                  currentColumn < NumberOfColumns && currentIndexOfFile < numberOfFiles;

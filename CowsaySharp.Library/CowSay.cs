@@ -2,6 +2,9 @@
 {
     using System;
 
+    /// <summary>
+    /// The completed cow which can then be rendered
+    /// </summary>
     public class CowSay
     {
         private readonly SpeechBubble bubble;
@@ -88,7 +91,7 @@
         public string SpeechBubbleAndCow => this.SpeechBubble + Environment.NewLine + this.Cow;
 
         /// <summary>
-        /// Renders the specified output action.
+        /// Renders the cow using the specified output action e.g. <see cref="Console.WriteLine"/>.
         /// </summary>
         /// <param name="outputAction">The output action.</param>
         public void Render(Action<string> outputAction)

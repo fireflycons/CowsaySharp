@@ -1,13 +1,22 @@
 ﻿namespace CowsaySharp.ConsoleLibrary
 {
-    using System;
     using System.Linq;
     using System.Text;
 
     using CowsaySharp.Library;
 
+    /// <summary>
+    /// Simple command line parser
+    /// </summary>
     public static class Switches
     {
+        /// <summary>
+        /// Processes the switches.
+        /// </summary>
+        /// <param name="args">The arguments.</param>
+        /// <param name="programDir">The program directory.</param>
+        /// <param name="bubbleChars">The bubble chars.</param>
+        /// <returns>An <see cref="Options"/> object, or <c>null</c> if nothing to do.</returns>
         public static Options ProcessSwitches(string[] args, string programDir, IBubbleChars bubbleChars)
         {
             var options = new Options
@@ -114,8 +123,8 @@
 
                         case 'L':
 
-                           ListCowfiles.ShowCowfiles(programDir, true);
-                           return null;
+                            ListCowfiles.ShowCowfiles(programDir, true);
+                            return null;
 
                         default:
 

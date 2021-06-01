@@ -5,6 +5,9 @@
     using System.Linq;
     using System.Text;
 
+    /// <summary>
+    /// Builds and renders a speech bubble
+    /// </summary>
     public class SpeechBubble
     {
         private readonly bool figlet;
@@ -13,6 +16,13 @@
 
         private string message;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SpeechBubble"/> class.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        /// <param name="bubbleChars">The bubble chars.</param>
+        /// <param name="maxLineLength">Maximum length of the line.</param>
+        /// <param name="figlet">if set to <c>true</c> [figlet].</param>
         public SpeechBubble(string message, IBubbleChars bubbleChars, int? maxLineLength, bool figlet)
         {
             this.figlet = figlet;
@@ -21,8 +31,19 @@
             this.message = message;
         }
 
+        /// <summary>
+        /// Gets the bubble chars.
+        /// </summary>
+        /// <value>
+        /// The bubble chars.
+        /// </value>
         public IBubbleChars BubbleChars { get; }
 
+        /// <summary>
+        /// Returns the speech bubble.
+        /// </summary>
+        /// <returns>The speech bubble</returns>
+        /// <exception cref="ArgumentOutOfRangeException">maxLineLength - Cannot specify a size smaller than 10 characters or larger than 76 characters</exception>
         public string ReturnSpeechBubble()
         {
             char[] splitChar = { ' ', (char)10, (char)13 };

@@ -14,129 +14,85 @@
     {
         bool breakOut;
 
-        IBubbleChars bubbleChars;
-
         string cowFileLocation;
-
-        string cowSpecified;
-
-        ICowFace face;
 
         string moduleDirectory;
 
+        private Options options =
+            new Options { Face = new DefaultCowFace(), BubbleChars = new SayBubbleChars(), Width = 40 };
+
         [Parameter]
         [Alias("f")]
-        public string Cowfile { get; set; }
+        public string Cowfile
+        {
+            get => this.options.CowFile;
+            set => this.options.CowFile = value;
+        }
 
         [Parameter]
         [Alias("e")]
-        public string Eyes { get; set; }
+        public string Eyes
+        {
+            get => this.options.Face.Eyes; 
+            set => this.options.Face.Eyes = value;
+        }
 
         [Parameter]
         [Alias("n")]
-        public SwitchParameter Figlet { get; set; }
+        public SwitchParameter Figlet
+        {
+            get => this.options.IsFiglet; 
+            set => this.options.IsFiglet = value;
+        }
 
         [Parameter]
         [Alias("l")]
         public SwitchParameter List { get; set; }
 
         [Parameter(ValueFromPipeline = true, Position = 0)]
-        public string Message { get; set; }
+        public string Message
+        {
+            get => this.options.Message; 
+            set => this.options.Message = value;
+        }
 
         [Parameter]
-        [ValidateSet("borg", "dead", "greedy", "paranoid", "stoned", "tired", "wired", "young")]
+        [ValidateSet("Borg", "Dead", "Greedy", "Paranoid", "Stoned", "Tired", "Wired", "Young")]
         [Alias("m")]
-        public string Mode { get; set; }
+        public string Mode
+        {
+            get => this.options.Face.ToString();
+            set
+            {
+                if (Enum.TryParse<CowFaces.FaceTypes>(value, true, out var enumValue))
+                {
+                    this.options.Face = CowFaces.GetCowFace(enumValue);
+                }
+            }
+        }
 
         [Parameter]
-        public SwitchParameter Think { get; set; }
+        public SwitchParameter Think
+        {
+            get => this.options.BubbleChars.GetType() == typeof(ThinkBubbleChars); 
+            set => this.options.BubbleChars = value ? (IBubbleChars)new ThinkBubbleChars() : new SayBubbleChars();
+        }
 
         [Parameter]
         [Alias("T")]
-        public string Tongue { get; set; }
+        public string Tongue
+        {
+            get => this.options.Face.Tongue; 
+            set => this.options.Face.Tongue = value;
+        }
 
         [Parameter]
         [Alias("W")]
-        public int Wrapcolumn { get; set; } = 40;
-
-        protected override void BeginProcessing()
+        [ValidateRange(10, 76)]
+        public int Wrapcolumn
         {
-            this.moduleDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            this.cowFileLocation = $"{this.moduleDirectory}\\cows";
-            this.cowSpecified = $"{this.cowFileLocation}\\default.cow";
-            this.face = CowFaces.GetCowFace(CowFaces.FaceTypes.DefaultFace);
-
-            if (!string.IsNullOrEmpty(this.Mode))
-            {
-                switch (this.Mode)
-                {
-                    case "borg":
-                        this.face = CowFaces.GetCowFace(CowFaces.FaceTypes.Borg);
-                        break;
-                    case "dead":
-                        this.face = CowFaces.GetCowFace(CowFaces.FaceTypes.Dead);
-                        break;
-                    case "greedy":
-                        this.face = CowFaces.GetCowFace(CowFaces.FaceTypes.Greedy);
-                        break;
-                    case "paranoid":
-                        this.face = CowFaces.GetCowFace(CowFaces.FaceTypes.Paranoid);
-                        break;
-                    case "stoned":
-                        this.face = CowFaces.GetCowFace(CowFaces.FaceTypes.Stoned);
-                        break;
-                    case "tired":
-                        this.face = CowFaces.GetCowFace(CowFaces.FaceTypes.Tired);
-                        break;
-                    case "wired":
-                        this.face = CowFaces.GetCowFace(CowFaces.FaceTypes.Wired);
-                        break;
-                    case "young":
-                        this.face = CowFaces.GetCowFace(CowFaces.FaceTypes.Young);
-                        break;
-                }
-            }
-
-            if (!string.IsNullOrEmpty(this.Eyes) && string.IsNullOrWhiteSpace(this.face.Eyes))
-            {
-                this.face = new CowFace(this.Eyes);
-            }
-
-            if (string.IsNullOrEmpty(this.face.Eyes))
-            {
-                this.face = CowFaces.GetCowFace(CowFaces.FaceTypes.DefaultFace);
-            }
-
-            if (!string.IsNullOrEmpty(this.Tongue) && string.IsNullOrWhiteSpace(this.face.Tongue))
-            {
-                this.face.Tongue = this.Tongue;
-            }
-
-            if (!string.IsNullOrEmpty(this.Cowfile))
-            {
-                this.cowSpecified = this.Cowfile;
-            }
-
-            if (this.Wrapcolumn < 10 || this.Wrapcolumn > 76)
-            {
-                this.ThrowTerminatingError(
-                    new ErrorRecord(
-                        new ArgumentOutOfRangeException(
-                            nameof(this.Wrapcolumn),
-                            "Cannot specify a size smaller than 10 characters or larger than 76 characters"),
-                        "E1",
-                        ErrorCategory.LimitsExceeded,
-                        this));
-            }
-
-            if (this.Think)
-            {
-                this.bubbleChars = new ThinkBubbleChars();
-            }
-            else
-            {
-                this.bubbleChars = new SayBubbleChars();
-            }
+            get => this.options.Width; 
+            set => this.options.Width = value;
         }
 
         /// <summary>
@@ -147,9 +103,9 @@
             if (this.List)
             {
                 Console.WriteLine();
-                ListCowfiles.ShowCowfiles(this.moduleDirectory, list: true);
+                ListCowfiles.ShowCowfiles(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), listInColumns: true);
                 Console.WriteLine();
-                this.breakOut = true;
+                return;
             }
             else if (string.IsNullOrWhiteSpace(this.Message))
             {
@@ -167,10 +123,7 @@
         /// <returns>New <see cref="CowSay"/></returns>
         private CowSay BuildCowsay()
         {
-            return new CowSay(
-                AbstractCowFile.GetCowFile(this.cowSpecified),
-                new SpeechBubble(this.Message, this.bubbleChars, this.Wrapcolumn, this.Figlet),
-                this.face);
+            return new CowSay(this.options);
         }
     }
 }
