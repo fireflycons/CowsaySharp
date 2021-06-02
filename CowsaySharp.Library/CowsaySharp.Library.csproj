@@ -3,6 +3,8 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <OutputType>Library</OutputType>
+    <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
 
   <ItemGroup>
@@ -54,6 +56,8 @@
     <None Remove="cows\vader-koala.cow" />
     <None Remove="cows\vader.cow" />
     <None Remove="cows\www.cow" />
+    <None Remove="fonts\big.zip" />
+    <None Remove="fonts\small.zip" />
   </ItemGroup>
 
   <ItemGroup>
@@ -105,6 +109,12 @@
     <EmbeddedResource Include="cows\vader-koala.cow" />
     <EmbeddedResource Include="cows\vader.cow" />
     <EmbeddedResource Include="cows\www.cow" />
+    <EmbeddedResource Include="fonts\big.zip" />
+    <EmbeddedResource Include="fonts\small.zip" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FIGlet-_-lib" Version="1.0.6" />
   </ItemGroup>
 
 </Project>

@@ -5,6 +5,11 @@
     using System.Linq;
     using System.Text;
 
+    using CowsaySharp.Library.fonts;
+
+    using FIGlet;
+    using FIGlet.Utility;
+
     /// <summary>
     /// Builds and renders a speech bubble
     /// </summary>
@@ -22,7 +27,7 @@
         /// <param name="message">The message.</param>
         /// <param name="bubbleChars">The bubble chars.</param>
         /// <param name="maxLineLength">Maximum length of the line.</param>
-        /// <param name="figlet">if set to <c>true</c> [figlet].</param>
+        /// <param name="figlet">if set to <c>true</c>, generate FIGlet font.</param>
         public SpeechBubble(string message, IBubbleChars bubbleChars, int? maxLineLength, bool figlet)
         {
             this.figlet = figlet;
@@ -62,7 +67,8 @@
 
             if (this.figlet)
             {
-                messageAsList = SplitFigletToLinesAsList(this.message);
+                messageAsList = SplitFigletToLinesAsList(
+                    FIGfont.FromEmbeddedResource("small.zip", typeof(IFontLocator)).Render(this.message.Trim()));
             }
             else if (this.message.Length > this.maxLineLength)
             {
