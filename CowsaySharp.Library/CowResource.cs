@@ -34,7 +34,7 @@
         /// <returns>List of cow names.</returns>
         public static IEnumerable<string> ListCowResources()
         {
-            var ns = typeof(IResourceLocator).Namespace;
+            var ns = typeof(ICowLocator).Namespace;
 
             return ThisAssembly.GetManifestResourceNames()
                 .Select(r => r.Substring(ns.Length + 1, r.Length - ns.Length - 5));
