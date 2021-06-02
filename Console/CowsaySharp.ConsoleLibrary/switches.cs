@@ -21,9 +21,8 @@
         {
             var options = new Options
                               {
-                                  BubbleChars = bubbleChars, Face = CowFaces.GetCowFace(CowFaces.FaceTypes.DefaultFace)
+                                  BubbleChars = bubbleChars, Face = CowFaces.GetCowFace(CowFaces.FaceTypes.DefaultFace), CowFile = "default"
                               };
-            var cowSpecified = AbstractCowFile.GetCowFile("default");
             var face = CowFaces.GetCowFace(CowFaces.FaceTypes.DefaultFace);
             var numberOfArguments = args.Length;
 
